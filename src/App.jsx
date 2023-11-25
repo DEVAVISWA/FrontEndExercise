@@ -1,75 +1,26 @@
 import React, { useState } from 'react'
+import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import RegisterNewUser from './components/registerNewUser'
+import Home from './components/Home'
+import Login from './components/Login'
 
+const padd = {
+  padding: 15
+}
 function App() {
-
-  const [registerForm, setRegisterForm] = useState({ //2
-    userName: '',
-    name: '',
-    password: ''
-  })
-  
-  const handleRegister= async (event) => { //6
-    event.preventDefault()
-    const registerBody= {
-      userName : registerForm.userName,
-      name: registerForm.name,
-      password: registerForm.password
-    }
-
-    const response= await fetch ('http://127.0.0.1:3000/api/users/' , { //7
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json'
-      },
-      body: JSON.stringify(registerBody)
-    })
-    const data= await response.json()
-    if(response.status==200){
-      console.log('user created successfully')
-      console.log(data)
-      setRegisterForm({
-        userName: '',
-        name:'',
-        password:''
-      })
-    } else{
-      console.log('error creating user')
-    }
-  }
-  return ( //1
-    <div>
-      <h1>Notes Application</h1>
-      <div> 
-        {/* 5 */}
-        <form onSubmit={handleRegister}> 
-          <div>
-            <input
-              type="email"
-              placeholder='email...'
-              value={registerForm.userName} //3
-              onChange={e => setRegisterForm({ ...registerForm, userName: e.target.value })} //4
-              required />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder='name...'
-              value={registerForm.name}
-              onChange={e => setRegisterForm({ ...registerForm, name: e.target.value })}
-              required />
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder='password...'
-              value={registerForm.password}
-              onChange={e => setRegisterForm({ ...registerForm, password: e.target.value })}
-              required />
-          </div>
-          <button type='submit'>Register</button>
-        </form>
+  return ( //1 in components registerNewUser
+    <Router>
+      <div>
+        <Link to={'/'} style={padd}>Home</Link>
+        <Link to={'/register'} style={padd}>Register</Link>
+        <Link to={'/login'} style={padd}>Login</Link>
       </div>
-    </div>
+      <Routes >
+        <Route path='/' element={<Home />} />
+        <Route path='/register' element={<RegisterNewUser />} />
+        <Route path='/login' element={< Login />} />
+      </Routes>
+    </Router>
   )
 }
 
