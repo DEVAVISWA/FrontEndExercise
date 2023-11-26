@@ -26,6 +26,7 @@ function Login() {
             })
         } else {
             console.log("error logging in user")
+            console.log(data)
         }
     }
     return (
@@ -50,6 +51,9 @@ function Login() {
                 </div>
                 <button type='submit'>Login</button>
             </form>
+            <div>
+                New user ? Please <a href="http://localhost:5173/register">Resgiter</a>
+            </div>
         </div>
     )
 }

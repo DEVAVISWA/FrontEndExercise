@@ -35,6 +35,7 @@ function RegisterNewUser() {
       })
     } else {
       console.log('error creating user')
+      console.log(data)
     }
   }
 
@@ -70,6 +71,9 @@ function RegisterNewUser() {
           </div>
           <button type='submit'>Register</button>
         </form>
+      </div>
+      <div>
+        If alredy registered <a href="http://localhost:5173/login">Login</a>
       </div>
     </div>
   )
