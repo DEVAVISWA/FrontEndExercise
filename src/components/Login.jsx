@@ -1,10 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Dashboard from './Dashboard'
 
 function Login() {
+    //for login authorization
+    const [user, setUser] = useState(null)
+    const [token, setToken] = useState(null)
+    useEffect(()=>{
+        const token= window.localStorage.getItem('token')
+        const user= window.localStorage.getItem('user')
+        if(token && user) {
+            setUser(JSON.parse(user))
+            setToken(token)
+        }
+    },[])
+
     const [loginForm, setLoginForm] = useState({
         userName: '',
         password: ''
-    })    
+    })
+    // const navigate = useNavigate()
     const handleLogin = async (e) => {
         e.preventDefault()
         console.log('Logging in User')
@@ -24,6 +39,11 @@ function Login() {
                 userName: '',
                 password: ''
             })
+            setToken(data.token)
+            setUser(data)
+            // navigate('/dashboard')
+            window.localStorage.setItem('token', data.token)
+            window.localStorage.setItem('user', JSON.stringify(data))
         } else {
             console.log("error logging in user")
             console.log(data)
@@ -50,10 +70,16 @@ function Login() {
                     />
                 </div>
                 <button type='submit'>Login</button>
-            </form>
-            <div>
-                New user ? Please <a href="http://localhost:5173/register">Resgiter</a>
-            </div>
+            </form >
+            {
+                user ? (<Dashboard
+                    user={user} setUser={setUser}
+                    token={token} setToken={setToken}
+                />) :
+                    (<p>
+                        New user ? Please <a href="http://localhost:5173/register">Resgiter</a>
+                    </p>)
+            }
         </div>
     )
 }
