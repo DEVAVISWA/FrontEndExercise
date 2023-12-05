@@ -1,14 +1,38 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Dashboard({ user, setUser, token, setToken }) {
   const handleLogout = () => {
     setUser(null)
     setToken(null)
 
-    window.localStorage.clear()
+    window.localStorage.removeItem('user')
+    window.localStorage.removeItem('token')
   }
   const [newNote, setNewNote] = useState('')
+  //1 to view the created notes by the particular user
+  const [notes, setNotes] = useState([])
+  //4 define fetchNotes() fn
+  const fetchNotes = async () => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    console.log('Fetching notes..')
+    try {
+      const response= await axios.get('http://127.0.0.1:3000/api/notes', config)
+      console.log('Notes fetched successfully')
+      console.log(response.data)
+      setNotes(response.data)
+    } catch (e) {
+      console.log('Error fetchng notes', e)
+    }
+  }
+  //3 fetch notes using use effect
+  useEffect(() => {
+    fetchNotes()
+  }, [])
   const addNote = async (e) => {
     e.preventDefault()
     const config = {
@@ -16,7 +40,7 @@ function Dashboard({ user, setUser, token, setToken }) {
         'Authorization': `Bearer ${token}`
       }
     }
-    const newNoteObject= {
+    const newNoteObject = {
       content: newNote
     }
     console.log('Adding note')
@@ -46,6 +70,12 @@ function Dashboard({ user, setUser, token, setToken }) {
         /> &nbsp;
         <button type='submit'>Submit</button>
       </form>
+      {/*2  to view the notes posted by the particular user */}
+      <ul>
+        {
+          notes.map(note => <li key={note._id}> {note.content} </li>)
+        }
+      </ul>
     </div>
   )
 }
