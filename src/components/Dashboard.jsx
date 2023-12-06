@@ -49,6 +49,7 @@ function Dashboard({ user, setUser, token, setToken }) {
       console.log('note added successfully')
       console.log(response.data)
       setNewNote('')
+      fetchNotes() ;
     } catch (error) {
       console.log('error adding note', error)
     }
